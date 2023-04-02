@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import Toast from 'react-native-toast-message';
 import {
   StyleSheet,
   Text,
@@ -42,7 +43,7 @@ export default function RegistrationScreen() {
     'Roboto-Medium': require('../assets/fonts/Roboto-Medium.ttf'),
     'Roboto-Bold': require('../assets/fonts/Roboto-Bold.ttf'),
   });
-
+// fonts
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
       await SplashScreen.hideAsync();
@@ -52,15 +53,15 @@ export default function RegistrationScreen() {
   if (!fontsLoaded) {
     return null;
   }
-    
-//     useEffect(() => {
-//         const onChange = () => { 
-//             const width = Dimensions.get('window').width;
-//         }
-//    }, [])
-    
-
+        
+// form submit
   const onSubmit = () => {
+     if (
+      !dataUserState.userLogin ||
+      !dataUserState.userMail ||
+      !dataUserState.userPassword) {
+      alert('Please entry all fields!!!')
+    };
     setIsFocused(false);
     Keyboard.dismiss();
     console.log(dataUserState);
