@@ -1,8 +1,10 @@
 import { useState, useCallback, useEffect } from 'react';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import {
   StyleSheet,
   Text,
   View,
+  Image,
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
@@ -20,9 +22,19 @@ const initialState = {
   userPassword: '',
 };
 
+const defaultBorderColor = "#E8E8E8";
+const accentBorderColor = "#FF6C00";
+const placeholderTextColor = "#bdbdbd";
+
 export default function RegistrationScreen() {
   const [isFocused, setIsFocused] = useState(false);
-    const [dataUserState, setDataUserState] = useState(initialState);
+  const [dataUserState, setDataUserState] = useState(initialState);
+  const [showPassword, setShowPassword] = useState(true);
+  // bordercolors
+  const [loginBorderColor, setLoginBorderColor] = useState(defaultBorderColor);
+  const [emailBorderColor, setEmailBorderColor] = useState(defaultBorderColor);
+  const [passBorderColor, setPassBorderColor] = useState(defaultBorderColor);
+  const [picture, setPicture] = useState("");
     const { height, width } = useWindowDimensions();
 
   const [fontsLoaded] = useFonts({
@@ -48,7 +60,7 @@ export default function RegistrationScreen() {
 //    }, [])
     
 
-  const keyboardHide = () => {
+  const onSubmit = () => {
     setIsFocused(false);
     Keyboard.dismiss();
     console.log(dataUserState);
@@ -56,7 +68,7 @@ export default function RegistrationScreen() {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={keyboardHide}>
+    <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss(), setIsFocused(false)}}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
@@ -65,13 +77,24 @@ export default function RegistrationScreen() {
           onLayout={onLayoutRootView}
         >
           <View style={styles.form}>
+            <View style={styles.avatar}>
+              <Image source={require('../assets/images/avatar.png')} style={styles.img} />
+              <TouchableOpacity
+                style={styles.btnAddActive}
+                activeOpacity={1}
+              >
+                <Ionicons name="close-outline" size={24} color="#E8E8E8" />
+              </TouchableOpacity>
+            </View>
             <Text style={styles.formTitle}>Registration</Text>
             <View style={{ marginBottom: 16 }}>
               <TextInput
                 style={styles.input}
                 placeholder="Login"
                 placeholderTextColor="#BDBDBD"
-                onFocus={() => setIsFocused(true)}
+                borderColor={loginBorderColor}
+                onFocus={() => { setIsFocused(true), setLoginBorderColor(accentBorderColor) }}
+                onBlur={() => setLoginBorderColor(defaultBorderColor)}
                 onChangeText={value =>
                   setDataUserState(pervState => ({
                     ...pervState,
@@ -86,7 +109,9 @@ export default function RegistrationScreen() {
                 style={styles.input}
                 placeholder="E-mail"
                 placeholderTextColor="#BDBDBD"
-                onFocus={() => setIsFocused(true)}
+                borderColor={emailBorderColor}
+                onFocus={() => { setIsFocused(true), setEmailBorderColor(accentBorderColor) }}
+                onBlur={() => setEmailBorderColor(defaultBorderColor)}
                 onChangeText={value =>
                   setDataUserState(pervState => ({
                     ...pervState,
@@ -98,11 +123,13 @@ export default function RegistrationScreen() {
             </View>
             <View style={{ marginBottom: 43 }}>
               <TextInput
-                style={styles.input}
+                style={{ ...styles.input, position: "relative" }}
                 placeholder="Password"
-                secureTextEntry={true}
+                secureTextEntry={showPassword}
                 placeholderTextColor="#BDBDBD"
-                onFocus={() => setIsFocused(true)}
+                borderColor={passBorderColor}
+                onFocus={() => { setIsFocused(true), setPassBorderColor(accentBorderColor) }}
+                onBlur={() => setPassBorderColor(defaultBorderColor)}
                 onChangeText={value =>
                   setDataUserState(pervState => ({
                     ...pervState,
@@ -111,9 +138,15 @@ export default function RegistrationScreen() {
                 }
                 value={dataUserState.userPassword}
               />
+              <TouchableOpacity
+                style={styles.hiddenPass}
+                onPress={() => setShowPassword(!showPassword)}
+              >
+                <Text style={styles.textPassHidden}>{showPassword ? "Show" : "Hidden"}</Text>
+              </TouchableOpacity>
             </View>
             <View style={{ marginBottom: 16 }}>
-              <TouchableOpacity style={styles.button} onPress={keyboardHide}>
+              <TouchableOpacity style={styles.button} onPress={onSubmit}>
                 <Text style={styles.btnText}>Sign Up</Text>
               </TouchableOpacity>
             </View>
@@ -142,6 +175,43 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
 
+  avatar: {
+    position: "relative",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  img: {
+    width: 120,
+    position: "absolute",
+    bottom: 32,
+    borderRadius: 16,
+  },
+
+  btnAdd: {
+    position: "absolute",
+    bottom: 14,
+    right: -12.5,
+    width: 25,
+    height: 25,
+    borderRadius: 25,
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#FF6C00",
+  },
+
+  btnAddActive: {
+    position: "absolute",
+    bottom: 14,
+    right: -12.5,
+    width: 25,
+    height: 25,
+    borderRadius: 25,
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#E8E8E8",
+  },
+
   formTitle: {
       color: '#212121',
       fontFamily: 'Roboto-Medium',
@@ -159,6 +229,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#F6F6F6",
     height: 50,
     padding: 16,
+    fontFamily: "Roboto-Regular",
+    fontWeight: "400",
+    fontSize: 16,
+  },
+
+  hiddenPass: {
+    position: "absolute",
+    top: 16,
+    right: 16,
+  },
+
+  textPassHidden: {
+    color: "#1B4371",
     fontFamily: "Roboto-Regular",
     fontWeight: "400",
     fontSize: 16,
