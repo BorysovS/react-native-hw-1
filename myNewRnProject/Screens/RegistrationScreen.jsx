@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import Toast from 'react-native-toast-message';
+import * as ImagePicker from 'expo-image-picker';
+import { AntDesign } from '@expo/vector-icons';
 import {
   StyleSheet,
   Text,
@@ -11,8 +11,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
-    Keyboard,
-  useWindowDimensions
+  Keyboard,
+  useWindowDimensions,
 } from 'react-native';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
@@ -23,9 +23,9 @@ const initialState = {
   userPassword: '',
 };
 
-const defaultBorderColor = "#E8E8E8";
-const accentBorderColor = "#FF6C00";
-const placeholderTextColor = "#bdbdbd";
+const defaultBorderColor = '#E8E8E8';
+const accentBorderColor = '#FF6C00';
+const placeholderTextColor = '#bdbdbd';
 
 export default function RegistrationScreen() {
   const [isFocused, setIsFocused] = useState(false);
@@ -35,15 +35,16 @@ export default function RegistrationScreen() {
   const [loginBorderColor, setLoginBorderColor] = useState(defaultBorderColor);
   const [emailBorderColor, setEmailBorderColor] = useState(defaultBorderColor);
   const [passBorderColor, setPassBorderColor] = useState(defaultBorderColor);
-  const [picture, setPicture] = useState("");
-    const { height, width } = useWindowDimensions();
+  // const [picture, setPicture] = useState("");
+  const [image, setImage] = useState(null);
+  const { height, width } = useWindowDimensions();
 
   const [fontsLoaded] = useFonts({
     'Roboto-Regular': require('../assets/fonts/Roboto-Regular.ttf'),
     'Roboto-Medium': require('../assets/fonts/Roboto-Medium.ttf'),
     'Roboto-Bold': require('../assets/fonts/Roboto-Bold.ttf'),
   });
-// fonts
+  // fonts
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
       await SplashScreen.hideAsync();
@@ -53,15 +54,29 @@ export default function RegistrationScreen() {
   if (!fontsLoaded) {
     return null;
   }
-        
-// form submit
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
+  // form submit
   const onSubmit = () => {
-     if (
+    if (
       !dataUserState.userLogin ||
       !dataUserState.userMail ||
-      !dataUserState.userPassword) {
-      alert('Please entry all fields!!!')
-    };
+      !dataUserState.userPassword
+    ) {
+      alert('Please entry all fields!!!');
+    }
     setIsFocused(false);
     Keyboard.dismiss();
     console.log(dataUserState);
@@ -69,23 +84,42 @@ export default function RegistrationScreen() {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss(), setIsFocused(false)}}>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        Keyboard.dismiss(), setIsFocused(false);
+      }}
+    >
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <View
-          style={{ ...styles.regBox, paddingBottom: isFocused ? 32 : 92, paddingBottom: height <= 420 ? 8 : 45, }}
+          style={{
+            ...styles.regBox,
+            paddingBottom: isFocused ? 32 : 92,
+            paddingBottom: height <= 420 ? 8 : 45,
+          }}
           onLayout={onLayoutRootView}
         >
           <View style={styles.form}>
             <View style={styles.avatar}>
-              <Image source={require('../assets/images/avatar.png')} style={styles.img} />
-              <TouchableOpacity
-                style={styles.btnAddActive}
-                activeOpacity={1}
-              >
-                <Ionicons name="close-outline" size={24} color="#E8E8E8" />
-              </TouchableOpacity>
+              {image && <Image source={{ uri: image }} style={styles.img} />}
+              {image ? (
+                <TouchableOpacity
+                  style={styles.btnAddActive}
+                  activeOpacity={1}
+                  onPress={() => setImage(null)}
+                >
+                  <AntDesign name="minus" size={24} color="#E8E8E8" />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={styles.btnAdd}
+                  activeOpacity={1}
+                  onPress={pickImage}
+                >
+                  <AntDesign name="plus" size={24} color="#FF6C00" />
+                </TouchableOpacity>
+              )}
             </View>
             <Text style={styles.formTitle}>Registration</Text>
             <View style={{ marginBottom: 16 }}>
@@ -94,7 +128,9 @@ export default function RegistrationScreen() {
                 placeholder="Login"
                 placeholderTextColor="#BDBDBD"
                 borderColor={loginBorderColor}
-                onFocus={() => { setIsFocused(true), setLoginBorderColor(accentBorderColor) }}
+                onFocus={() => {
+                  setIsFocused(true), setLoginBorderColor(accentBorderColor);
+                }}
                 onBlur={() => setLoginBorderColor(defaultBorderColor)}
                 onChangeText={value =>
                   setDataUserState(pervState => ({
@@ -111,7 +147,9 @@ export default function RegistrationScreen() {
                 placeholder="E-mail"
                 placeholderTextColor="#BDBDBD"
                 borderColor={emailBorderColor}
-                onFocus={() => { setIsFocused(true), setEmailBorderColor(accentBorderColor) }}
+                onFocus={() => {
+                  setIsFocused(true), setEmailBorderColor(accentBorderColor);
+                }}
                 onBlur={() => setEmailBorderColor(defaultBorderColor)}
                 onChangeText={value =>
                   setDataUserState(pervState => ({
@@ -124,12 +162,14 @@ export default function RegistrationScreen() {
             </View>
             <View style={{ marginBottom: 43 }}>
               <TextInput
-                style={{ ...styles.input, position: "relative" }}
+                style={{ ...styles.input, position: 'relative' }}
                 placeholder="Password"
                 secureTextEntry={showPassword}
                 placeholderTextColor="#BDBDBD"
                 borderColor={passBorderColor}
-                onFocus={() => { setIsFocused(true), setPassBorderColor(accentBorderColor) }}
+                onFocus={() => {
+                  setIsFocused(true), setPassBorderColor(accentBorderColor);
+                }}
                 onBlur={() => setPassBorderColor(defaultBorderColor)}
                 onChangeText={value =>
                   setDataUserState(pervState => ({
@@ -143,7 +183,9 @@ export default function RegistrationScreen() {
                 style={styles.hiddenPass}
                 onPress={() => setShowPassword(!showPassword)}
               >
-                <Text style={styles.textPassHidden}>{showPassword ? "Show" : "Hidden"}</Text>
+                <Text style={styles.textPassHidden}>
+                  {showPassword ? 'Show' : 'Hidden'}
+                </Text>
               </TouchableOpacity>
             </View>
             <View style={{ marginBottom: 16 }}>
@@ -152,7 +194,9 @@ export default function RegistrationScreen() {
               </TouchableOpacity>
             </View>
             <View style={{ alignItems: 'center' }}>
-              <Text>Already have an account? Log in</Text>
+              <TouchableOpacity>
+                <Text>Already have an account? Log in</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -177,45 +221,54 @@ const styles = StyleSheet.create({
   },
 
   avatar: {
-    position: "relative",
-    alignItems: "center",
-    justifyContent: "center",
+    position: 'absolute',
+    borderRadius: 16,
+    width: 120,
+    height: 120,
+    marginTop: -150,
+    backgroundColor: '#F6F6F6',
+    alignSelf: 'center',
   },
 
   img: {
-    width: 120,
-    position: "absolute",
-    bottom: 32,
     borderRadius: 16,
+    width: 120,
+    height: 120,
+
+    alignSelf: 'center',
   },
 
   btnAdd: {
-    position: "absolute",
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
     bottom: 14,
     right: -12.5,
     width: 25,
     height: 25,
     borderRadius: 25,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: "#FF6C00",
+    borderColor: '#FF6C00',
+    fill: '#FF6C00',
   },
 
   btnAddActive: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 14,
     right: -12.5,
     width: 25,
     height: 25,
     borderRadius: 25,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: "#E8E8E8",
+    borderColor: '#E8E8E8',
+    alignItems: 'center',
   },
 
   formTitle: {
-      color: '#212121',
-      fontFamily: 'Roboto-Medium',
+    color: '#212121',
+    fontFamily: 'Roboto-Medium',
     fontWeight: '500',
     fontSize: 30,
     textAlign: 'center',
@@ -226,25 +279,25 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: "#E8E8E8",
-    backgroundColor: "#F6F6F6",
+    borderColor: '#E8E8E8',
+    backgroundColor: '#F6F6F6',
     height: 50,
     padding: 16,
-    fontFamily: "Roboto-Regular",
-    fontWeight: "400",
+    fontFamily: 'Roboto-Regular',
+    fontWeight: '400',
     fontSize: 16,
   },
 
   hiddenPass: {
-    position: "absolute",
+    position: 'absolute',
     top: 16,
     right: 16,
   },
 
   textPassHidden: {
-    color: "#1B4371",
-    fontFamily: "Roboto-Regular",
-    fontWeight: "400",
+    color: '#1B4371',
+    fontFamily: 'Roboto-Regular',
+    fontWeight: '400',
     fontSize: 16,
   },
 
@@ -258,7 +311,7 @@ const styles = StyleSheet.create({
 
   btnText: {
     fontSize: 16,
-      fontWeight: '400',
+    fontWeight: '400',
     fontFamily: 'Roboto-Regular',
     color: '#FFFFFF',
     lineHeight: 19,
