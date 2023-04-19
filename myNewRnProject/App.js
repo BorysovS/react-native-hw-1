@@ -8,8 +8,8 @@ import { styles } from './styles/styles';
 export default function App() {
   return (
     <View style={styles.container}>
-      {/* <RegistrationScreen /> */}
-      <LoginScreen />
+      <RegistrationScreen />
+      {/* <LoginScreen /> */}
       <StatusBar style="auto" />
     </View>
   );

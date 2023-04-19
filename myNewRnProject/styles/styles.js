@@ -129,5 +129,6 @@ export const styles = StyleSheet.create({
     borderTopRightRadius: 25,
     paddingTop: 32,
     paddingBottom: 111,
+    alignItems: 'center',
   },
 });

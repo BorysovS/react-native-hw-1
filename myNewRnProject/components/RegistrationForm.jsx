@@ -77,7 +77,7 @@ export const RegistrationForm = () => {
         <View
           style={{
             ...styles.regBox,
-            paddingBottom: isFocused ? 32 : 92,
+            maxHeight: isFocused ? 360 : null,
             paddingBottom: height <= 420 ? 8 : 45,
           }}>
           <View style={styles.form}>

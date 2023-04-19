@@ -31,26 +31,47 @@ export default function LoginForm() {
 
   const { height, width } = useWindowDimensions();
 
+  const handleSubmit = () => { 
+    if (
+      !dataUser.email ||
+      !dataUser.password ) {
+      alert('Please entry all fields!!!');
+    }
+    setIsFocused(false);
+    Keyboard.dismiss();
+    console.log(dataUser);
+    setDataUser(initialState);
+  }
+
   return (
     <TouchableWithoutFeedback onPress={() => {
       Keyboard.dismiss(), setIsFocused(false);
     }}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
     <View style={{
-      ...styles.loginForm, paddingBottom: isFocused ? 32 : 111,
-      paddingBottom: height <= 420 ? 15 : 111,
+          ...styles.loginForm,
+          maxHeight: isFocused ? 230 : null,
+          paddingBottom: height <= 420 ? 15 : 111,
     }}>
       <View style={styles.form}>
         <Text style={styles.formTitle}>Sign In</Text>
             <View style={{marginBottom: 16}}>
-              <TextInput style={{...styles.input }}
-                placeholder="Login"
+              <TextInput style={{ ...styles.input }}
+                placeholder="Email"
                 placeholderTextColor="#BDBDBD"
                 borderColor={loginBorderColor}
-                onFocus={() => {
-                  setIsFocused(true), setLoginBorderColor(accentBorderColor);
+                onChangeText={value => {
+                  setDataUser(pervstate => ({
+                    ...pervstate,
+                    email: value,
+                  }))
                 }}
-                onBlur={() => setLoginBorderColor(defaultBorderColor)}></TextInput>
+                onFocus={() => {
+                  setIsFocused(true),
+                  setLoginBorderColor(accentBorderColor);
+                }}
+                onBlur={() => setLoginBorderColor(defaultBorderColor)}
+                value={dataUser.email}></TextInput>
         </View>
             <View style={{marginBottom: 42}}>
               <TextInput style={styles.input}
@@ -61,13 +82,20 @@ export default function LoginForm() {
                 onFocus={() => {
                   setIsFocused(true), setPassBorderColor(accentBorderColor);
                 }}
-                onBlur={() => setPassBorderColor(defaultBorderColor)}></TextInput>
+                onChangeText={value => { 
+                  setDataUser(pervstate => ({
+                    ...pervstate,
+                    password: value,
+                  }))
+                }}
+                onBlur={() => setPassBorderColor(defaultBorderColor)}
+                value={dataUser.password}></TextInput>
           <TouchableOpacity style={styles.hiddenPass} onPress={() => setShowPassword(!showPassword)}>
             <Text style={styles.textPassHidden}>{showPassword ? 'Show' : 'Hidden'}</Text>
           </TouchableOpacity>
         </View>
         <View style={{ marginBottom: 16 }}>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
             <Text style={styles.btnText}>Sign In</Text>
           </TouchableOpacity>
         </View>
