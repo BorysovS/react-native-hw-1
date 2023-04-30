@@ -12,6 +12,7 @@ import {
   Keyboard,
   ScrollView
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const initialState = {
   email: '',
@@ -28,6 +29,7 @@ export default function LoginForm() {
   const [loginBorderColor, setLoginBorderColor] = useState(defaultBorderColor);
   const [passBorderColor, setPassBorderColor] = useState(defaultBorderColor);
   const [showPassword, setShowPassword] = useState(true);
+  const navigation = useNavigation();
 
   const { height, width } = useWindowDimensions();
 
@@ -100,7 +102,7 @@ export default function LoginForm() {
           </TouchableOpacity>
         </View>
         <View style={{ alignItems: 'center' }}>
-          <TouchableOpacity>
+              <TouchableOpacity onPress={() => {navigation.navigate("Registration")}}>
             <Text>Don't have an account? Sign Up</Text>
           </TouchableOpacity>
         </View>
@@ -110,63 +112,3 @@ export default function LoginForm() {
       </TouchableWithoutFeedback>
   );
 }
-
-// const styles = StyleSheet.create({
-//   loginForm: {
-//     backgroundColor: '#FFFFFF',
-//     borderTopLeftRadius: 25,
-//     borderTopRightRadius: 25,
-//     paddingTop: 32,
-//     paddingBottom: 111,
-//     height: 489,
-//   },
-
-//   form: {
-//     paddingHorizontal: 16,
-//   },
-
-//   formTitle: {
-//     color: '#212121',
-//     fontWeight: '500',
-//     fontSize: 30,
-//     textAlign: 'center',
-//     letterSpacing: 0.01,
-//     marginBottom: 32,
-//   },
-
-//   input: {
-//     borderWidth: 1,
-//     borderRadius: 8,
-//     borderColor: '#E8E8E8',
-//     backgroundColor: '#F6F6F6',
-//     height: 50,
-//     padding: 16,
-//     fontWeight: '400',
-//     fontSize: 16,
-//   },
-
-//   button: {
-//     paddingVertical: 16,
-//     width: 353,
-//     backgroundColor: '#FF6C00',
-//     borderRadius: 100,
-//     alignItems: 'center',
-//   },
-//   btnText: {
-//     fontSize: 16,
-//     fontWeight: '400',
-//     color: '#FFFFFF',
-//     lineHeight: 19,
-//   },
-//   textPassHidden: {
-//     color: '#1B4371',
-//     fontFamily: 'Roboto-Regular',
-//     fontWeight: '400',
-//     fontSize: 16,
-//   },
-//   hiddenPass: {
-//     position: 'absolute',
-//     top: 16,
-//     right: 16,
-//   },
-// });

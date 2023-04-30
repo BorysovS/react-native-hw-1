@@ -29,22 +29,9 @@ export default function LoginScreen() {
         <ImageBackground
         source={require('../assets/images/photoBG.jpg')}
                 style={styles.image}>
-                <LoginForm />
+          <LoginForm />
                 
       </ImageBackground>
         </View>
     )
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: 'white',
-//   },
-
-//   image: {
-//     flex: 1,
-//     resizeMode: 'cover',
-//     justifyContent: 'flex-end',
-//   },
-// });
