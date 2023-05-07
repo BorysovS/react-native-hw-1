@@ -5,14 +5,14 @@ import { postStyle, styles } from '../../styles/styles';
 import { CreatePostForm } from '../../components/CreatePostForm';
 
 
-export const CreatePostsScreen = () => {
+export const CreatePostsScreen = ({navigation}) => {
   const { width, height } = useWindowDimensions();
 
 
   return (
     <View style={styles.container}>
         <ScrollView>
-        <CreatePostForm />
+        <CreatePostForm navigation={navigation} />
         </ScrollView>
       </View>
   )

@@ -152,7 +152,7 @@ export const postStyle = StyleSheet.create({
   photoBox: {
     position: 'relative',
     height: 240,
-    Width: 340,
+    Width: 343,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
@@ -161,6 +161,14 @@ export const postStyle = StyleSheet.create({
     borderWidth: 1,
     borderStyle: 'solid',
     borderRadius: 8,
+    overflow: 'hidden',
+    // width: 343,
+    // height: 240,
+    // position: 'relative',
+
+    // backgroundColor: '#E8E8E8',
+    // borderColor: '#E8E8E8',
+    // borderRadius: 20,
   },
 
   imgBtn: {

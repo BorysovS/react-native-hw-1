@@ -87,7 +87,7 @@ export const HomeScreen = ({ navigation }) => {
           // }
         }}
       />
-      <HomeTab.Screen name="CreatePosts" component={CreatePostsScreen} options={{ headerLeft: () => (<TouchableOpacity style={{ marginLeft: 16 }} onPress={() => navigation.goBack()}><Feather name="arrow-left" size={24} color="rgba(33, 33, 33, 0.8)" /></TouchableOpacity>)}}/>
+      <HomeTab.Screen name="CreatePosts" component={CreatePostsScreen} options={{ headerLeft: () => (<TouchableOpacity style={{ marginLeft: 16 }} onPress={() => navigation.goBack()}><Feather name="arrow-left" size={24} color="rgba(33, 33, 33, 0.8)" navigation={navigation} /></TouchableOpacity>)}}/>
       <HomeTab.Screen name="Profile" component={ProfileScreen} options={{ headerLeft: () => (<TouchableOpacity style={{marginLeft: 16}} onPress={() => navigation.goBack()}><Feather name="arrow-left" size={24} color="rgba(33, 33, 33, 0.8)" /></TouchableOpacity>)}}/>
     </HomeTab.Navigator>
   );
