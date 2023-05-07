@@ -132,3 +132,70 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export const postStyle = StyleSheet.create({
+  trashBtn: {
+    width: 70,
+    height: 40,
+    paddingHorizontal: 23,
+    paddingVertical: 8,
+    backgroundColor: '#F6F6F6',
+    borderRadius: 20,
+    justifyContent: 'flex-end',
+  },
+  pubBtnText: {
+    color: '#BDBDBD',
+    fontSize: 16,
+    lineHeight: 19,
+    textAlign: 'center',
+  },
+  photoBox: {
+    position: 'relative',
+    height: 240,
+    Width: 340,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+    backgroundColor: '#F6F6F6',
+    borderColor: '#E8E8E8',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderRadius: 8,
+  },
+
+  imgBtn: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 60,
+    height: 60,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 50,
+  },
+
+  textCreatePost: {
+    color: '#BDBDBD',
+    fontSize: 16,
+    marginBottom: 32,
+  },
+
+  createPostInput: {
+    height: 50,
+    paddingVertical: 16,
+    borderBottomColor: '#E8E8E8',
+    borderBottomWidth: 1,
+    color: '#212121',
+    // fontWeight: 500,
+    fontSize: 16,
+  },
+
+  locationInput: {
+    position: 'relative',
+    height: 50,
+    paddingVertical: 16,
+    paddingLeft: 28,
+    borderBottomColor: '#E8E8E8',
+    borderBottomWidth: 1,
+    color: '#212121',
+  },
+});
