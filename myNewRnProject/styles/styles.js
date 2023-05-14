@@ -207,3 +207,50 @@ export const postStyle = StyleSheet.create({
     color: '#212121',
   },
 });
+
+export const postItem = StyleSheet.create({
+  itemWrapper: {},
+  postPhoto: {
+    width: '100%',
+    height: 240,
+    marginBottom: 8,
+  },
+  postTitle: {
+    fontFamily: 'Roboto-Medium',
+    fontSize: 16,
+    lineHeight: 19,
+    marginBottom: 8,
+  },
+  postDiscription: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+  },
+});
+
+export const profileStyle = StyleSheet.create({
+  profileBox: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginBottom: 32,
+    marginTop: 32,
+    marginLeft: 16,
+  },
+
+  profileContact: {
+    marginLeft: 8,
+    justifyContent: 'center',
+  },
+
+  profileName: {
+    fontFamily: 'Roboto-Bold',
+    fontSize: 13,
+    lineHeight: 15,
+  },
+
+  profileEmail: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: 11,
+    lineHeight: 13,
+    color: 'rgba(33, 33, 33, 0.8)',
+  },
+});

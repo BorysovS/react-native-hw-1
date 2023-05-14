@@ -72,10 +72,11 @@ export const CreatePostForm = ({navigation}) => {
       ...postData,
       photo,
     };
-      console.log(data);
+    console.log(data);
+    navigation.navigate("Posts", {data})
     setPhoto(null);
       setPostData(initialState);
-      navigation.navigate("Posts")
+    
       
   };
 
