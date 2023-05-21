@@ -15,6 +15,7 @@ import { Feather } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { postStyle, styles } from '../styles/styles';
 import { useEffect, useRef, useState } from 'react';
+import * as Location from 'expo-location';
 
 const initialState = {
   name: '',
@@ -27,6 +28,7 @@ export const CreatePostForm = ({navigation}) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
+  const [location, setLocation] = useState(null);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -40,6 +42,8 @@ export const CreatePostForm = ({navigation}) => {
     }
   };
 
+
+
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
@@ -47,6 +51,21 @@ export const CreatePostForm = ({navigation}) => {
       setHasPermission(status === 'granted');
     })();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
+  }, []);
+  
 
   if (hasPermission === null) {
     return <View />;
@@ -59,10 +78,13 @@ export const CreatePostForm = ({navigation}) => {
     try {
       const { uri } = await cameraRef.takePictureAsync();
       setPhoto(uri);
+      let locationCord = await Location.getCurrentPositionAsync({});
+      setLocation(locationCord);
     } catch (error) {
       console.log('error:', error);
     }
   };
+  
 
   const onSubmit = () => {
     if (!postData.name || !postData.location || !photo) {
@@ -76,7 +98,6 @@ export const CreatePostForm = ({navigation}) => {
     navigation.navigate("Posts", {data})
     setPhoto(null);
       setPostData(initialState);
-    
       
   };
 
@@ -88,6 +109,7 @@ export const CreatePostForm = ({navigation}) => {
     >
       <View
         style={{
+          height: '100%',
           alignItems: 'center',
           paddingHorizontal: 16,
           paddingVertical: 32,
@@ -181,7 +203,7 @@ export const CreatePostForm = ({navigation}) => {
               marginBottom: 'auto',}}>Publish</Text>
           </TouchableOpacity>
         </View>
-        <View>
+        <View style={{marginTop: 'auto'}}>
           <TouchableOpacity style={postStyle.trashBtn}>
             <Feather name="trash-2" size={24} color="#BDBDBD" />
           </TouchableOpacity>
