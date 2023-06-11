@@ -3,6 +3,7 @@ import {
   FlatList,
   Image,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { profileStyle, styles } from '../../styles/styles';
@@ -23,15 +24,17 @@ export const PostsScreen = ({ route, navigation }) => {
   
   // console.log('routeparams', route.params.data);
   return (
-      <View>
+    <View>
+      <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
         <View style={profileStyle.profileBox}>
           <Image source={require('../../assets/images/bombAvatar.jpeg')} style={{ width: 60, height: 60, borderRadius: 16 }} />
           <View style={profileStyle.profileContact}>
           <Text style={profileStyle.profileName}>Bomb</Text>
             <Text style={profileStyle.profileEmail}>BombBoom@mail.com</Text>
             </View>
-      </View>
-      <FlatList data={posts} keyExtractor={(item, idx) => idx.toString()} renderItem={(item) => (<PostItem post={item} navigation={navigation}/>)} />
+        </View>
+        </TouchableOpacity>
+      <FlatList data={posts} keyExtractor={(item, idx) => idx.toString()} renderItem={(item) => (<PostItem post={item} navigation={navigation} />)} style={{marginBottom: 112}} />
       </View>
     )
 }

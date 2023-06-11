@@ -80,6 +80,7 @@ export const CreatePostForm = ({navigation}) => {
       setPhoto(uri);
       let locationCord = await Location.getCurrentPositionAsync({});
       setLocation(locationCord);
+
     } catch (error) {
       console.log('error:', error);
     }
