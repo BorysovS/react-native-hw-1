@@ -9,6 +9,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import Layout from './components/Layout';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -28,13 +30,15 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <View style={styles.container}>
-        {/* <RegistrationScreen /> */}
-        {/* <LoginScreen /> */}
-        <Layout />
-        <StatusBar style="auto" />
-      </View>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <View style={styles.container}>
+          {/* <RegistrationScreen /> */}
+          {/* <LoginScreen /> */}
+          <Layout />
+          <StatusBar style="auto" />
+        </View>
+      </NavigationContainer>
+    </Provider>
   );
 }
