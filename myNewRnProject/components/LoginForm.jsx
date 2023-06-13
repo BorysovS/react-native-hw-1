@@ -13,6 +13,8 @@ import {
   ScrollView
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { authSignInUser } from '../redux/auth/operation';
 
 const initialState = {
   email: '',
@@ -30,6 +32,7 @@ export default function LoginForm() {
   const [passBorderColor, setPassBorderColor] = useState(defaultBorderColor);
   const [showPassword, setShowPassword] = useState(true);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const { height, width } = useWindowDimensions();
 
@@ -41,6 +44,7 @@ export default function LoginForm() {
     }
     setIsFocused(false);
     Keyboard.dismiss();
+    dispatch(authSignInUser(dataUser))
     console.log(dataUser);
     setDataUser(initialState);
   }

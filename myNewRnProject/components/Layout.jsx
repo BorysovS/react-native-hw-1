@@ -14,7 +14,7 @@ const MainStack = createStackNavigator();
 const Layout = ({ navigation}) => {
 
 
-    const isAuth = true;
+    const isAuth = false;
 
     return (
     isAuth ? (

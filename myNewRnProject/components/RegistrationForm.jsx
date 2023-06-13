@@ -15,12 +15,15 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { authSignUpUser } from '../redux/auth/operation';
 
 
 const initialState = {
-  userLogin: '',
-  userMail: '',
-  userPassword: '',
+  login: '',
+  email: '',
+  password: '',
+  avatar: '',
 };
 
 const defaultBorderColor = '#E8E8E8';
@@ -28,14 +31,15 @@ const accentBorderColor = '#FF6C00';
 
 
 export const RegistrationForm = () => { 
-    const [isFocused, setIsFocused] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const [dataUserState, setDataUserState] = useState(initialState);
   const [showPassword, setShowPassword] = useState(true);
+  const dispatch = useDispatch();
   // bordercolors
   const [loginBorderColor, setLoginBorderColor] = useState(defaultBorderColor);
   const [emailBorderColor, setEmailBorderColor] = useState(defaultBorderColor);
   const [passBorderColor, setPassBorderColor] = useState(defaultBorderColor);
-  const [image, setImage] = useState(null);
+  // const [image, setImage] = useState(null);
   const navigation = useNavigation();
   const { height, width } = useWindowDimensions();
 
@@ -47,22 +51,23 @@ export const RegistrationForm = () => {
       quality: 1,
     });
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      setDataUserState( pervstate => ({ ...pervstate, avatar: result.assets[0].uri }));
     }
   };
 
   // form submit
   const onSubmit = () => {
     if (
-      !dataUserState.userLogin ||
-      !dataUserState.userMail ||
-      !dataUserState.userPassword
+      !dataUserState.login ||
+      !dataUserState.email ||
+      !dataUserState.password
     ) {
       alert('Please entry all fields!!!');
     }
     setIsFocused(false);
     Keyboard.dismiss();
-    console.log(dataUserState);
+    console.log(dataUserState)
+    dispatch(authSignUpUser(dataUserState));
     setDataUserState(initialState);
   };
 
@@ -83,8 +88,8 @@ export const RegistrationForm = () => {
           }}>
           <View style={styles.form}>
             <View style={styles.avatar}>
-              {image && <Image source={{ uri: image }} style={styles.img} />}
-              {image ? (
+              {dataUserState.avatar && <Image source={{ uri: dataUserState.avatar }} style={styles.img} />}
+              {dataUserState.avatar ? (
                 <TouchableOpacity
                   style={styles.btnAddActive}
                   activeOpacity={1}
@@ -116,10 +121,10 @@ export const RegistrationForm = () => {
                 onChangeText={value =>
                   setDataUserState(pervState => ({
                     ...pervState,
-                    userLogin: value,
+                    login: value,
                   }))
                 }
-                value={dataUserState.userLogin}
+                value={dataUserState.login}
               />
             </View>
             <View style={{ marginBottom: 16 }}>
@@ -135,10 +140,10 @@ export const RegistrationForm = () => {
                 onChangeText={value =>
                   setDataUserState(pervState => ({
                     ...pervState,
-                    userMail: value,
+                    email: value,
                   }))
                 }
-                value={dataUserState.userMail}
+                value={dataUserState.email}
               />
             </View>
             <View style={{ marginBottom: 43 }}>
@@ -155,10 +160,10 @@ export const RegistrationForm = () => {
                 onChangeText={value =>
                   setDataUserState(pervState => ({
                     ...pervState,
-                    userPassword: value,
+                    password: value,
                   }))
                 }
-                value={dataUserState.userPassword}
+                value={dataUserState.password}
               />
               <TouchableOpacity
                 style={styles.hiddenPass}
