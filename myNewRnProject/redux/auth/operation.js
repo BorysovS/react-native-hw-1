@@ -3,15 +3,34 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut
+  signOut,
+  updateProfile
 } from "firebase/auth";
-import { auth, db } from "../../firebase/config";
+import { auth, db  } from "../../firebase/config";
 
 export const authSignUpUser = createAsyncThunk('auth/signup', async({email, password, avatar, login} , { rejectWithValue }) => { 
   try {
-      console.log(email)
-       const user = await createUserWithEmailAndPassword(auth, email, password);
-        console.log(user)
+    const user = await createUserWithEmailAndPassword(auth, email, password);
+    console.log(user)
+
+    console.log(avatar);
+    console.log(login);
+    await updateProfile(auth.currentUser, {
+      displayName: login,
+      photoURL: avatar,
+    });
+
+
+    const updatedUser = {
+      uid: auth.currentUser.uid,
+      displayName: auth.currentUser.displayName,
+      email: auth.currentUser.email,
+      photoURL: auth.currentUser.photoURL,
+    };
+    // const { uid, displayName, email, photoURL } = user;
+    console.log(updatedUser);
+
+    return updatedUser;
     } catch (error) {
        return rejectWithValue(error.message); 
     }
