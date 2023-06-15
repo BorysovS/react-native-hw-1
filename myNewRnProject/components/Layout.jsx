@@ -6,15 +6,40 @@ import { MapScreen } from "../Screens/Main/MapScreen";
 import { CommentsScreen } from "../Screens/Main/CommentsScreen";
 import { Feather } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
-
+import { useDispatch, useSelector } from "react-redux";
+import {selectIsAuth } from '../redux/auth/selectors'
+import { useEffect } from "react";
+import { auth } from "../firebase/config";
+import { onAuthStateChanged } from "firebase/auth";
+import { getCurrentUser } from "../redux/auth/authSlice";
 
 const AuthStack = createStackNavigator();
 const MainStack = createStackNavigator();
 
-const Layout = ({ navigation}) => {
+const Layout = ({ navigation }) => {
+    const isAuth = useSelector(selectIsAuth);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => { 
+            if (user) { 
+                const userData = {
+                    userId: user.uid,
+                    userAvatar: user.photoURL,
+                    userName: user.displayName,
+                    userEmail: user.email,
+                    isAuth: true,
+                }
+                dispatch(getCurrentUser(userData))
+            }  
+        })
+    
+    }, [])
+    
 
 
-    const isAuth = false;
+
+    // const isAuth = false;
 
     return (
     isAuth ? (

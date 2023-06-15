@@ -31,7 +31,7 @@ export const authSignUpUser = createAsyncThunk('auth/signup', async({email, pass
     console.log(updatedUser);
 
     return updatedUser;
-    } catch (error) {
+  } catch (error) {
        return rejectWithValue(error.message); 
     }
 });
@@ -40,6 +40,7 @@ export const authSignUpUser = createAsyncThunk('auth/signup', async({email, pass
 export const authSignInUser = createAsyncThunk('auth/signin', async ({ email, password }, { rejectWithValue }) => { 
   try {
     const user = await signInWithEmailAndPassword(auth, email, password);
+    console.log('user', user); 
   } catch (error) {
     return rejectWithValue(error.message);
   }
